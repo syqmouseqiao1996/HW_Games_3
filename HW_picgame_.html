@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+  <link rel="stylesheet" href="stylesheet/styles.css">
+
+  <title>有Bug拼圖</title>
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <a class="my-2 btn btn-light bta textsize fontsty" id="start">開始</a>
+    </div>
+
+    <div class="mx-auto mb-5 divpic">
+      <div id="gameview" class="d-flex justify-content-start flex-wrap">
+        <div id="pic01" class="playpic part01"></div>
+        <div id="pic02" class="playpic part02"></div>
+        <div id="pic03" class="playpic part03"></div>
+        <div id="pic04" class="playpic part04"></div>
+        <div id="pic05" class="playpic part05"></div>
+        <div id="pic06" class="playpic part06"></div>
+        <div id="pic07" class="playpic part07"></div>
+        <div id="pic08" class="playpic part08"></div>
+        <div id="pic09" class="playpic part09"></div>
+        <div id="pic10" class="playpic part10"></div>
+        <div id="pic11" class="playpic part11"></div>
+        <div id="pic12" class="playpic part12"></div>
+        <div id="pic13" class="playpic part13"></div>
+        <div id="pic14" class="playpic part14"></div>
+        <div id="pic15" class="playpic part15"></div>
+        <div id="pic16" class="playpic part16"></div>
+      </div>
+    </div>
+
+    <div class="my-5 mx-auto divpic ">
+      
+    </div>
+
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+
+  <script>
+    var pivbtn = document.getElementsByClassName("playpic");
+    var fh = "";
+    var divlocal;
+    var randompic = [];
+    var rightanswer;
+    var answer;
+
+
+    document.getElementById("start").onclick = startGame;
+
+    function startGame() {
+      document.getElementById("pic01").className = "playpic part01 nonepic";
+      rightanswer = [];
+      var lattice = 16;
+      var latnum = Math.sqrt(lattice);
+      var oddeven = 1;
+      var oddevenran = 0;
+      fh = "";
+
+      while (oddeven % 2 !== oddevenran) {
+        var randompic = [];
+        while (randompic.length < lattice) {
+          var ran = Math.floor(Math.random() * lattice);
+          var nonelocal;
+          if (randompic.indexOf(ran) == -1) {
+            randompic.push(ran);
+            if (ran == 0) {
+              nonelocal = randompic.length - 1;
+            }
+          }
+        }
+
+        var oddeven = 0;
+        var oddevenran = Math.floor((nonelocal / latnum) % 2);
+
+        for (var i = 0; i < 16; i++) {
+
+          for (var j = 0; j < (i + 1); j++) {
+            if (randompic[j] > randompic[i] && randompic[i] !== 0) {
+              oddeven++;
+            }
+          }
+        }
+      }
+
+      for (var i = 0; i < 16; i++) {
+        var claddi = randompic[i];
+        rightanswer.push(document.getElementById("pic" + if10(i + 1) + "").className);
+
+        if (if10(claddi + 1) == "01") {
+          document.getElementById("pic" + if10(i + 1) + "").className = "playpic part" + if10(claddi + 1) + " nonepic";
+          pivbtn[i] = document.getElementById("pic" + if10(i + 1) + "");
+          fh = pivbtn[i];
+        }
+        else {
+          document.getElementById("pic" + if10(i + 1) + "").className = "playpic part" + if10(claddi + 1) + "";
+        }
+      }
+
+      alert("開始！");
+    }
+
+    function if10(x) {
+      if (x < 10) {
+        x = "0" + x;
+      }
+      return x;
+    }
+
+    var pivbtn = document.getElementsByClassName("playpic");
+
+    for (var i = 0; i < pivbtn.length; i++) {
+      pivbtn[i].onclick =
+        function () {
+          for (var i = 0; i < pivbtn.length; i++) {
+            if (pivbtn[i] == this && fh !== "") {
+              if (pivbtn[(i + 4)] == fh) {
+                pointtop(i);
+              }
+              else if (pivbtn[(i + 1)] == fh && (i + 1) % 4 !== 0) {
+                pointleft(i);
+              }
+              else if (pivbtn[(i - 1)] == fh && (i - 1) % 4 !== 3) {
+                pointright(i);
+              }
+              else if (pivbtn[(i - 4)] == fh) {
+                pointbottom(i);
+              }
+            }
+          }
+        }
+    }
+
+    function pointtop(i) {
+      var x = pivbtn[i].className;
+      fh.className = x;
+      pivbtn[i].className = "playpic part01 nonepic";
+      fh = pivbtn[i];
+
+      if (pivbtn[0] == fh) {
+        enterend();
+      }
+    }
+
+    function pointleft(i) {
+      var x = pivbtn[i].className;
+      fh.className = x;
+      pivbtn[i].className = "playpic part01 nonepic";
+      fh = pivbtn[i];
+
+      if (pivbtn[0] == fh) {
+        enterend();
+      }
+    }
+
+    function pointright(i) {
+      var x = pivbtn[i].className;
+      fh.className = x;
+      pivbtn[i].className = "playpic part01 nonepic";
+      fh = pivbtn[i];
+    }
+
+    function pointbottom(i) {
+      var x = pivbtn[i].className;
+      fh.className = x;
+      pivbtn[i].className = "playpic part01 nonepic";
+      fh = pivbtn[i];
+    }
+
+    function enterend() {
+      for (var i = pivbtn.length - 1; i >= 0; i--) {
+        if (pivbtn[i].className !== rightanswer[i]) {
+          return;
+        }
+        else if (i == 0) {
+          fh.className = "playpic part01";
+          setTimeout(
+            function () {
+              alert("恭喜你過關！");
+              if (confirm("是否開始新的一局？")) {
+                startGame();
+              }
+            }, 500);
+        }
+      }
+    }
+
+  </script>
+</body>
+
+</html>

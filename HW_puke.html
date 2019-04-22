@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="stylesheet/styles.css">
+
+    <title>對對碰</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <div>
+            <a class="flex-fill mt-5 btn btn-light bta textsize fontsty" id="start">開始</a>
+        </div>
+
+        <div class="d-flex justify-content-around my-3">
+            <div id="puke1" class="pukewh pukebackpic"></div>
+            <div id="puke2" class="pukewh pukebackpic"></div>
+            <div id="puke3" class="pukewh pukebackpic"></div>
+            <div id="puke4" class="pukewh pukebackpic"></div>
+        </div>
+        <div class="d-flex justify-content-around my-3">
+            <div id="puke5" class="pukewh pukebackpic"></div>
+            <div id="puke6" class="pukewh pukebackpic"></div>
+            <div id="puke7" class="pukewh pukebackpic"></div>
+            <div id="puke8" class="pukewh pukebackpic"></div>
+        </div>
+        <div class="d-flex justify-content-around my-3">
+            <div id="puke9" class="pukewh pukebackpic"></div>
+            <div id="puke10" class="pukewh pukebackpic"></div>
+            <div id="puke11" class="pukewh pukebackpic"></div>
+            <div id="puke12" class="pukewh pukebackpic"></div>
+        </div>
+        <div class="d-flex justify-content-around my-3">
+            <div id="puke13" class="pukewh pukebackpic"></div>
+            <div id="puke14" class="pukewh pukebackpic"></div>
+            <div id="puke15" class="pukewh pukebackpic"></div>
+            <div id="puke16" class="pukewh pukebackpic"></div>
+        </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var claddi;
+        var randompic = [];
+        var selpukenum;
+        var pukesel1;
+        var pukesel2;
+        var btnonoff = "off";
+
+        document.getElementById("start").onclick = startGame;
+
+        function startGame() {
+            randompic = [];
+
+            while (randompic.length < 16) {
+                var ran = Math.floor(Math.random() * 16);
+
+                if (randompic.indexOf(ran) == -1) {
+                    randompic.push(ran);
+                }
+            }
+
+            for (var i = 0; i < 16; i++) {
+                if (randompic[i] >= 8) {
+                    randompic[i] = randompic[i] - 8;
+                }
+
+                claddi = randompic[i];
+                document.getElementById("puke" + (i + 1) + "").className = "pukewh pic" + if10(claddi + 1) + "";
+            }
+
+            setTimeout(Noeye, 3500);
+            btnonoff = "on";
+            selpukenum = 1;
+        }
+
+        function Noeye() {
+            for (var i = 0; i < 16; i++) {
+                claddi = randompic[i];
+
+                document.getElementById("puke" + (i + 1) + "").className = "pukewh pukebackpic pic" + if10(claddi + 1) + "";
+            }
+        }
+
+        function if10(x) {
+            if (x < 10) {
+                x = "0" + x;
+            }
+            return x;
+        }
+
+        var pukebtn = document.getElementsByClassName("pukewh");
+
+        for (var i = 0; i < pukebtn.length; i++) {
+            pukebtn[i].onclick =
+                function () {
+                    if (btnonoff == "on" && this.className !== "pukewh") {
+                        this.classList.remove("pukebackpic");
+                        if (selpukenum == 1) {
+                            pukesel1 = this;
+                            selpukenum++;
+                        }
+                        else if (selpukenum == 2) {
+                            pukesel2 = this;
+                            selpukenum--;
+                            btnonoff = "off";
+                            setTimeout(selpic, 1300);
+                        }
+                    }
+                }
+        }
+
+        function selpic() {
+            if (pukesel1.className == pukesel2.className) {
+                pukesel1.className = "pukewh";
+                pukesel2.className = "pukewh";
+                judpic();
+            }
+            else {
+                pukesel1.classList.add("pukebackpic");
+                pukesel2.classList.add("pukebackpic");
+            }
+            btnonoff = "on";
+        }
+
+        function judpic() {
+            for (var i = 0; i < pukebtn.length; i++) {
+                if (pukebtn[i].className !== "pukewh") {
+                    return;
+                }
+                else if (i == pukebtn.length - 1) {
+                    endgame();
+                }
+            }
+        }
+
+        function endgame() {
+            alert("恭喜你過關！");
+            for (var i = 0; i < pukebtn.length; i++) {
+                pukebtn[i].className = "pukewh pukebackpic";
+            }
+            setTimeout(
+                function () {
+                    btnonoff = "off";
+                    if (confirm("是否開始新的一局？")) {
+                        startGame();
+                    }
+                }, 1000);
+        }
+    </script>
+</body>
+
+</html>

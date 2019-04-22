@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheet/styles.css">
+
+    <title>抽數字</title>
+</head>
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="text-light d-flex align-items-center flex-column flex-md-row justify-content-md-between fontsty">
+            <div class="">
+                <a class="my-2 btn btn-secondary textsize fontsty text-light" id="restart">重新設定</a>
+            </div>
+            <div class="">設定最小範圍：(預設1)
+                <br>
+                <input type="number" class="mb-2" id="setminnum" value="1" min="0" max="5000">
+            </div>
+            <div class="">設定最大範圍：(預設10)
+                <br>
+                <input type="number" class="mb-2" id="setmaxnum" value="10" min="0" max="5000">
+            </div>
+            <div class="">
+                <a class="my-2 btn btn-secondary textsize fontsty text-light" id="start">確認設定</a>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="my-2 btn btn-info textsize fontsty text-light disabled" id="startget">抽</a>
+        </div>
+        <div class="fontsty">
+            <div id="numbertext" class="mx-auto mb-3 text-center text-light">
+                已抽到的數字(0)：
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="mb-4 runumber">
+                    <div id="runumtext1" class="text-light text-center display-3 font-weight-bold runblock1">
+                    </div>
+                    <div id="runumtext2" class="text-light text-center display-3 font-weight-bold runblock2">
+                    </div>
+                    <div id="runumtext3" class="text-light text-center display-3 font-weight-bold runblock2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        var nummax;
+        var nummin;
+        var numberarray = [];
+        var runumberarray = [];
+        var getnumstext = $("#numbertext");
+        var runumtext1 = $("#runumtext1");
+        var runumtext2 = $("#runumtext2");
+        var runumtext3 = $("#runumtext3");
+        var i = 0;
+        var allgetnums = "";
+        var alget = 0;
+
+        $("#start").on("click", startgetnum);
+
+        function startgetnum() {
+            nummax = +$("#setmaxnum").val();
+            nummin = +$("#setminnum").val();
+
+            if (nummin > nummax) {
+                alert("最小範圍的數字不可以比最大範圍大");
+                return;
+            }
+            else if (nummax > 5000 || nummax < 0) {
+                alert("最大範圍只可輸入0到5000的數");
+                return;
+            }
+            else if (nummin > 5000 || nummin < 0) {
+                alert("最小範圍只可輸入0到5000的數");
+                return;
+            }
+
+            $("#startget").removeClass("disabled");
+            $("#start").addClass("disabled");
+
+            runumtext1.html($("#setmaxnum").val());
+            $("#setmaxnum").attr("disabled", true);
+            $("#setminnum").attr("disabled", true);
+            var numaxin = nummax - nummin + 1
+            while (numberarray.length !== numaxin) {
+                var num = Math.floor(Math.random() * numaxin) + nummin;
+                if (numberarray.indexOf(num) == -1) {
+                    numberarray.push(num);
+                }
+            }
+        }
+
+        $("#startget").on("click", runrunrun);
+
+        function startget() {
+            $("#startget").removeClass("disabled");
+            while (i < numberarray.length) {
+                allgetnums += " " + numberarray[i];
+                alget++;
+                getnumstext.html("已抽到的數字(" + alget + ")：" + allgetnums);
+                numberarray.splice(0, 1);
+                return;
+            }
+        }
+
+        function numisend() {
+            if (confirm("數字已抽完，是否重新開始？")) {
+                orizero();
+            }
+        }
+
+        $("#restart").on("click", function () {
+            if (confirm("確定是否要重新開始？")) {
+                orizero();
+            }
+        }
+        );
+
+        function orizero() {
+            numberarray = [];
+            alget = 0;
+            allgetnums = "";
+            getnumstext.html("已抽到的數字(" + alget + ")：");
+            runumtext1.html("");
+            $("#setmaxnum").attr("disabled", false);
+            $("#setminnum").attr("disabled", false);
+            $("#startget").addClass("disabled");
+            $("#start").removeClass("disabled");
+        }
+
+        function runrunrun() {
+            if (i == numberarray.length) {
+                numisend();
+                return;
+            }
+
+            $("#startget").addClass("disabled");
+
+            runumberarray = [];
+            var x = 0;
+            while (runumberarray.length !== 6) {
+                var num = Math.floor(Math.random() * numberarray.length);
+                if (numberarray.length >= 6 && runumberarray.indexOf(numberarray[num]) == -1) {
+                    runumberarray.push(numberarray[num]);
+                }
+                else {
+                    if (runumberarray.length < numberarray.length && runumberarray.indexOf(numberarray[num]) == -1) {
+                        runumberarray.push(numberarray[num]);
+                    }
+                    else if (runumberarray.length >= numberarray.length) {
+                        runumberarray.push(runumberarray[x]);
+                        x++;
+                    }
+                }
+            }
+            runumtext1.html(runumberarray[0]).animate({
+                left: "-100%"
+            }, 500, function () {
+                runumtext2.html(runumberarray[1]).animate({
+                    left: "-100%"
+                }, 500, function () {
+                    runumtext3.html(runumberarray[2]).animate({
+                        left: "-100%"
+                    }, 500, function () {
+                        runumtext1.css("left", "150%");
+                        runumtext2.css("left", "150%");
+                        runumtext3.css("left", "150%");
+                        animatetext();
+                    });
+                });
+            });
+        }
+
+        function animatetext() {
+            runumtext1.html(runumberarray[3]).animate({
+                left: "-100%"
+            }, 500, function () {
+                runumtext2.html(runumberarray[4]).animate({
+                    left: "-100%"
+                }, 650, function () {
+                    runumtext3.html(runumberarray[5]).animate({
+                        left: "50%"
+                    }, 400, function () {
+                        runumtext1.html(runumtext3.html());
+                        runumtext1.css("left", "50%");
+                        runumtext2.css("left", "150%");
+                        runumtext3.css("left", "150%");
+                        startget();
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
